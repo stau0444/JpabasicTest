@@ -1,3 +1,4 @@
+import jpaTest.domain.AddressHistory;
 import jpaTest.domain.Member;
 import jpaTest.domain.Team;
 import jpaTest.domain.embededdTest.Address;
@@ -19,12 +20,31 @@ public class TestMain {
         tx.begin();
 
         try {
-            Address address = new Address("street","12333");
-            Address address2 = new Address("street","12333");
+            Address address1 = new Address("street1","12331");
+            Address address2 = new Address("street2","12332");
+            Address address3 = new Address("street3","12333");
 
-            //롬복의 이퀄스를 사용해도 되지만 롬복 이퀄스는 순환참조를 일으킬수 있으니 오버라이딩 해서 사용하는 것이 좋다.
-            System.out.println("address.equals(address2) = " + address.equals(address2));
+            Member member = new Member();
+            member.setName("member1");
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("피자");
+            member.getFavoriteFoods().add("고기");
 
+            member.getAddressHistories().add(new AddressHistory(address1));
+            member.getAddressHistories().add(new AddressHistory(address2));
+            member.getAddressHistories().add(new AddressHistory(address3));
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member member1 = em.find(Member.class, member.getId());
+            //값 타입 리스트 테이블을 모두 지우고   다시 넣는다 .
+            member1.getFavoriteFoods().remove("피자");
+
+            System.out.println(member1.getFavoriteFoods().get(1));
+            System.out.println(member1.getFavoriteFoods());
 
             tx.commit();
         }catch (Exception e){

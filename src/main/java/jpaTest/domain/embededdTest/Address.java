@@ -3,6 +3,7 @@ package jpaTest.domain.embededdTest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @Embeddable
+
 public class Address {
     private String street;
     private String zipcode;
